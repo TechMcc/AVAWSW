@@ -3,7 +3,13 @@ require 'thread'
 require 'rexml/document'
 require 'MeCab'
 
-  
+def talk(message)
+	file = File.open("speak.txt","a")
+	file.write(message + "\n")
+	file.close
+	system('sh speek.sh')	
+end
+
 
 def parseStr(sentence)
   mecabcli = MeCab::Tagger.new
