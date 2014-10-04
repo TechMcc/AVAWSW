@@ -4,27 +4,26 @@ require 'rexml/document'
 require 'MeCab'
 
 def talk(message)
-	file = File.open("speak.txt","a")
-	file.write(message + "\n")
-	file.close
-	system('sh speek.sh')	
+  file = File.open("speak.txt","a")
+  file.write(message + "\n")
+  file.close
+  system('sh speek.sh')	
 end
 
 
 def parseStr(sentence)
-  mecabcli = MeCab::Tagger.new
-  node = mecabcli.parseToNode(sentence)
-  word_array = []
-  begin
-	node = node.next
-	puts "#{node.surface}\t#{node.feature}"
-	if /^感動詞/ =~ node.feature.force_encoding("UTF-8")
-	  word_array << node.surface.force_encoding("UTF-8")
-	end
-  end until node.next.feature.include?("BOS/EOS")
-  puts word_array
-  if word_array != []
-	talk(word_array.sample)
+  if sentence =~ /こんにちは/
+	talk("こんにちは")
+  elsif sentence =~ /おはよう/
+	talk("おはよう")
+  elsif sentence =~ /元気/
+	talk("げんきですよ!")
+  elsif sentence =~ /さようなら/ || sentence =~ /さよなら/
+	talk("さよなら")
+  elsif sentence =~ /進捗/ || sentence =~ /新宿/
+	talk("進捗ダメです")
+  elsif sentence =~ /名前は/
+	talk("くまたんって言います!")
   end
 end  
 
