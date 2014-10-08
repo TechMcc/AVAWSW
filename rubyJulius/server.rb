@@ -12,6 +12,9 @@ end
 
 
 def parseStr(sentence)
+  logfile = File.open("log.txt","a")
+  logfile.write(sentence + "\n")
+  logfile.close
   if sentence =~ /こんにちは/
 	talk("こんにちは")
   elsif sentence =~ /おはよう/
@@ -24,6 +27,24 @@ def parseStr(sentence)
 	talk("進捗ダメです")
   elsif sentence =~ /名前は/
 	talk("くまたんって言います!")
+  elsif
+	mecabCli = MeCab::Tagger.new
+	node = mecabCli.parseToNode(sentence)
+	aisatu_array = []
+	name_array = []
+	begin 
+	  node = node.next
+	  if /^感動詞/ =~ node.feature.force_encoding("UTF-8")
+		aisatu_array << node.surface.force_encoding("UTF-8")
+	  elsif /^名詞/ =~ node.feature.force_encoding("UTF-8")
+		name_array << node.surface.force_encoding("UTF-8")
+	  end
+	end until node.next.feature.include?("BOS/EOS")
+	if aisatu_array != []
+	  talk(aisatu_array.sample)
+	elsif name_array != []
+	  talk(name_array.sample + "ってなに?")
+	end		  
   end
 end  
 
