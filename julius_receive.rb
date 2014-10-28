@@ -1,13 +1,23 @@
 require 'socket'
 require 'thread'
 require 'rexml/document'
+require './chatter_bot.rb'
 
-class Julius  
+class Reply_bear  
   def initialize
-	@receive_mode = 0
+	$chatter = Chatter.new
+	$julius = TCPSocket.new('localhost',10500)
+	$receive_mode = 0
   end
 
-  def self.get_word(str)
+  def talk_reply
+    system('sh speek.sh')
+
+        
+  end
+
+
+  def get_word(str)
 	sentence = ""
 	str['<s>'] = ""
 	str['</s>'] = ""
@@ -21,25 +31,25 @@ class Julius
 	return sentence 
   end
 
-  def self.receive_data
-	@julius = TCPSocket.new('localhost',10500)
-	receive_mode = 0
-	words = ""
-	while line = @julius.gets 
-	  if receive_mode == 0 #Nomal mode
+  def process_data
+	while line = $julius.gets 
+	  if $receive_mode == 0 #Nomal mode
 		if line.include?("<RECOGOUT>")
-		  receive_mode = 1 
-		  words += line
+		  $receive_mode = 1 
+		  words = line
 		  puts "RECEIVE String!!"
 		end  
-	  elsif receive_mode == 1 #Get Word mode 
+	  elsif $receive_mode == 1 #Get Word mode 
 		if line.include?("<\/RECOGOUT>")
 		  #返答パターン作成と文字列の初期化、ノーマルモードへ戻す。
 		  words += line
 		  sentence = get_word(words) 
-		  puts sentence  
+		  if sentence != nil
+			puts $chatter.create_reply(sentence)
+			puts sentence  
+		  end
 		  words = ""
-		  receive_mode = 0
+		  $receive_mode = 0
 		else
 		  words += line
 		end    
@@ -47,7 +57,10 @@ class Julius
 	end
   end
 
+  def start
+	process_data
+  end		
 end
 
-julius = Julius.new
-Julius.receive_data
+bear = Reply_bear.new
+bear.start

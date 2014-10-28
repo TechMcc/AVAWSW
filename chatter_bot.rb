@@ -16,7 +16,3 @@ class Chatter
   end
 end
 
-chatter = Chatter.new
-word = gets
-word = word.to_s
-puts chatter.create_reply(word)
