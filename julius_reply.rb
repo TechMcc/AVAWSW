@@ -10,6 +10,13 @@ class Reply_bear
 	$receive_mode = 0
   end
 
+  def talk(message)
+	file = File.open("speak.txt","a")
+	file.write(message)
+	file.close
+	system('sh talk.sh')	  
+  end 
+
   def get_word(str)
 	sentence = ""
 	str['<s>'] = ""
@@ -38,8 +45,10 @@ class Reply_bear
 		  words += line
 		  sentence = get_word(words) 
 		  if sentence != nil
-			puts $chatter.create_reply(sentence)
-			puts sentence  
+			puts "Input Word:#{sentence}"  
+			reply = $chatter.create_reply(sentence)
+			puts "Reply:#{reply}"
+			talk(reply) if reply != nil && reply.start_with?("ところで") == false
 		  end
 		  words = ""
 		  $receive_mode = 0
