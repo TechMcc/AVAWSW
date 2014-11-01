@@ -4,19 +4,20 @@ Analyze Voice - Analyze Words - Speak Words Systems in  TeddyBear
 
 ##使い方
 
-1. move to Your julius directry
-2. run julius on TCP/IP mode 
-4. run julius_receive.rb
+1. あなたの持っているjuliusのディレクトリに移動してください。
+2. juliusをサーバーモードで実行してください。 
+4. run julius_receive.rb!!
+
 
 ##処理の仕組み
+
+今回のシステムは、主に *音声解析*,*返答生成*.*返答音声生成*の３つの要素にわかれます。
 
 ###使っているもの
 
 * [Julius](julius.sourceforge.jp)
 * [docomo雑談対話API](https://dev.smt.docomo.ne.jp/?p=docs.api.page&api_docs_id=3)
 * [OpenJTalk](http://open-jtalk.sourceforge.net/)
-
-今回のシステムは、主に *音声解析*,*返答生成*.*返答音声生成*の３つの要素にわかれます。
 
 ###音声解析
 
