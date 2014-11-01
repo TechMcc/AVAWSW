@@ -2,12 +2,14 @@ require 'socket'
 require 'thread'
 require 'rexml/document'
 require './chatter_bot.rb'
+require 'serialport'
 
 class Reply_bear  
   def initialize
 	$chatter = Chatter.new
 	$julius = TCPSocket.new('localhost',10500)
 	$receive_mode = 0
+	$serialp = SerialPort.new("/dev/ttyACM0",9600)
   end
 
   def talk(message)
@@ -46,6 +48,7 @@ class Reply_bear
 		  sentence = get_word(words) 
 		  if sentence != nil
 			puts "Input Word:#{sentence}"  
+			$serialp.write('T')
 			reply = $chatter.create_reply(sentence)
 			puts "Reply:#{reply}"
 			talk(reply) if reply != nil && reply.start_with?("ところで") == false
