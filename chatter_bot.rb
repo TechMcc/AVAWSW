@@ -30,7 +30,9 @@ class Chatter
 	  	resp = h.request(request)
 	    response = JSON.parse(resp.body)
 		$context = response['context']
-		return response['utt']
+		if response['utt'].include?("<") == false
+		  return response['utt']
+		end
 	end
   end
 
