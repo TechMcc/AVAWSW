@@ -4,3 +4,4 @@ pattern.csv
 Gemfile.lock
 speak.txt
 message.wav
+log.json

@@ -23,6 +23,14 @@ class Reply_bear
 	system('sh talk.sh')	  
   end 
 
+  def get_log(sentence,reply)
+	data = {:input_word => sentence,:reply => reply}
+	jsondata = data.to_json
+	logfile = File.open("log.json","a")
+	logfile.write(jsondata)
+	logfile.close
+  end
+  
   def get_word(str)
 	sentence = ""
 	#Juliusが送ってくるXMLをそのままREXML::Documentすると、要素の中に要素が入っているというエラーが出る
@@ -61,6 +69,7 @@ class Reply_bear
 			reply = $chatter.create_reply(sentence)
 			puts "Reply:#{reply}"
 			talk(reply) if reply != nil && reply.start_with?("ところで") == false
+		    get_log(sentence,reply)
 		  end
 		  words = ""
 		  $receive_mode = 0
