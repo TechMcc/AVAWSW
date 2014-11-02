@@ -57,7 +57,7 @@ class Reply_bear
 		  if sentence != nil
 			puts "Input Word:#{sentence}"  
 			#サーボモーターとLEDを動作させるためのArduinoとのシリアル通信を行う。
-			$serialp.write('T')
+		    $serialp.write('T')
 			reply = $chatter.create_reply(sentence)
 			puts "Reply:#{reply}"
 			talk(reply) if reply != nil && reply.start_with?("ところで") == false
