@@ -7,10 +7,10 @@ require 'serialport'
 #ReplyBotClassの生成
 class Reply_bear  
 	def initialize
-		$chatter = Chatter.new
-		$julius = TCPSocket.new('localhost',10500)
-		$receive_mode = 0
-		$serialp = SerialPort.new("/dev/ttyACM0",9600)
+		@chatter = Chatter.new
+		@julius = TCPSocket.new('localhost',10500)
+		@receive_mode = 0
+		@serialp = SerialPort.new("/dev/ttyACM0",9600)
 	end
 
 	#発声部分
@@ -50,14 +50,14 @@ class Reply_bear
 
 	def process_data
 		#XMLの受信部分。一行ごとに読み込んでいく。
-		while line = $julius.gets 
+		while line = @julius.gets 
 			if $receive_mode == 0 #Nomal mode
 				if line.include?("<RECOGOUT>")
 					#最初の部分の受信。ここから音声取得モードに切り替える。
-					$receive_mode = 1 
+					@receive_mode = 1 
 					words = line
 				end  
-			elsif $receive_mode == 1 #Get Word mode 
+			elsif @receive_mode == 1 #Get Word mode 
 				if line.include?("<\/RECOGOUT>")
 					#返答パターン作成と文字列の初期化、ノーマルモードへ戻す。
 					words += line
@@ -65,14 +65,14 @@ class Reply_bear
 					if sentence != nil
 						puts "Input Word:#{sentence}"  
 						#サーボモーターとLEDを動作させるためのArduinoとのシリアル通信を行う。
-						$serialp.write('T')
-						reply = $chatter.create_reply(sentence)
+						@serialp.write('T')
+						reply = @chatter.create_reply(sentence)
 						puts "Reply:#{reply}"
 						talk(reply) if reply != nil && reply.start_with?("ところで") == false
 						get_log(sentence,reply)
 					end
 					words = ""
-					$receive_mode = 0
+					@receive_mode = 0
 				else
 					words += line
 				end    
@@ -81,6 +81,7 @@ class Reply_bear
 	end
 
 	def start
+		puts "Start!"
 		process_data
 	end		
 end
