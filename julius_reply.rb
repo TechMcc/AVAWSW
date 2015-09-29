@@ -51,7 +51,7 @@ class Reply_bear
 	def process_data
 		#XMLの受信部分。一行ごとに読み込んでいく。
 		while line = @julius.gets 
-			if $receive_mode == 0 #Nomal mode
+			if @receive_mode == 0 #Nomal mode
 				if line.include?("<RECOGOUT>")
 					#最初の部分の受信。ここから音声取得モードに切り替える。
 					@receive_mode = 1 

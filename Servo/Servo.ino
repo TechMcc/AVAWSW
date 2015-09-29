@@ -16,16 +16,16 @@ void loop(){
 	  for(int cou = 0;cou < 5;cou++){
 		digitalWrite(3,HIGH);
                 digitalWrite(4,HIGH);
-               while(i < 45){
+               while(i < 270){
 		  delay(10);
-		  val = 45 - i;
+		  val = 270 - i;
 		  myservo.write(val);
 		  i++;
 		}
 		i = 0;
                 digitalWrite(3,LOW);
                digitalWrite(4,LOW); 
-		while(i < 45){
+		while(i < 270){
 		  delay(10);
 		  val = i;
 		  myservo.write(val);
